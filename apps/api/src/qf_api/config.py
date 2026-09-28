@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     # Visual backend: "cards" (Pillow, offline, default) or "hyperframes" (motion HTML -> MP4).
     # Per skills/heygen-hyperframes/SKILL.md: HTML composition for promo/explainer.
     qf_visuals: str = "cards"
+    # Copy style: "noir" | "ember" | "mono" | "auto" (hash of topic, deterministic per topic).
+    qf_style: str = "auto"
     # Composer: "python" (subprocess ffmpeg) or "java" (workers/java-renderer, bounded CPU).
     qf_composer: str = "python"
     # Voiceover: "1" = free Edge-TTS narration muxed under the video (silent fallback).

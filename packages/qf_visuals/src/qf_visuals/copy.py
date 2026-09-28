@@ -19,6 +19,54 @@ from pathlib import Path
 CAP = "Qoneqt Pipeline"
 SUB = "Topic in. MP4 out."
 
+STYLES = {
+    # noir: midnight orb, blue punch, lower-third captions (the reference look)
+    "noir": {
+        "bg": "dark blue night, glowing horizon",
+        "accent": "#8ab8ff",
+        "cap_css": "left:0; right:0; bottom:330px; text-align:center;",
+        "shade": 0.30,
+        "vignette": True,
+        "music": "happy-beats-business-moves-vol-1-by-ende-dot-app.mp3",
+    },
+    # ember: warm concert fire, orange punch, centered captions
+    "ember": {
+        "bg": "golden ember concert fire glow, warm stage",
+        "accent": "#ffb14e",
+        "cap_css": "left:0; right:0; bottom:850px; text-align:center;",
+        "shade": 0.34,
+        "vignette": True,
+        "music": "happy-beats-business-moves-vol-11-by-ende-dot-app.mp3",
+    },
+    # mono: desaturated urban night, all-white punch, top-third captions
+    "mono": {
+        "bg": "desaturated urban night street, moody monochrome",
+        "accent": "#ffffff",
+        "cap_css": "left:0; right:0; top:300px; text-align:center;",
+        "shade": 0.42,
+        "vignette": False,
+        "music": "happy-beats-business-moves-vol-12-by-ende-dot-app.mp3",
+    },
+}
+
+
+def choose_style(topic: str, explicit: str = "auto") -> str:
+    explicit = (explicit or "auto").strip().lower()
+    if explicit in STYLES:
+        return explicit
+    import hashlib
+
+    h = int(hashlib.sha256(topic.strip().lower().encode()).hexdigest(), 16)
+    return list(STYLES)[h % len(STYLES)]
+
+
+def style_music(style: str) -> Path:
+    from qf_audio.mix import MUSIC as _default
+
+    name = STYLES.get(style, STYLES["noir"])["music"]
+    p = _default.parent / name
+    return p if p.exists() else _default
+
 
 def _esc(s: object) -> str:
     return _html.escape(str(s), quote=False)
