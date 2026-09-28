@@ -50,19 +50,51 @@ make render-sample TOPIC="AI communities in Kochi"
 ├── workers/
 │   ├── java-renderer/   # Pure-JDK ffmpeg composer (virtual threads + Semaphore(2))
 │   └── java-backend/    # Pure-JDK backend: same API + Java2D cards + java compose (make run-java-api)
-├── apps/web/index.html  # Demo UI (served at / by either backend)
+├── apps/web/            # Static showcase site (Vercel) + demo UI (served at / by either backend)
 ├── packages/
 │   ├── qf_script/       # LLM -> hook/script/scene plan (key-optional)
 │   ├── qf_visuals/      # Cinematic 1080x1920 cards (glow + floating UI + captions)
 │   └── qf_compose/      # Ken Burns drift + xfade cuts -> MP4 (optional QF_MUSIC bed)
 ├── storage/             # jobs/*.json, videos/*.mp4 (gitignored except .gitkeep)
 ├── infra/               # (v0: root Dockerfile + docker-compose.yml)
-├── scripts/render_sample.py
+├── scripts/
+│   ├── render_sample.py
+│   ├── render_showcase.py  # Re-render the four showcase clips
+│   └── make_showcase.py    # Compress them for web + poster frames
 ├── tests/
 ├── Makefile | pyproject.toml | Dockerfile | docker-compose.yml
+├── vercel.json          # Static showcase deploy (apps/web)
 ├── ARCHITECTURE.md
 └── challenge.pdf
 ```
+
+## Deployment
+
+The two halves deploy to different places, on purpose.
+
+**Showcase site → Vercel (static).** `apps/web/` is a dependency-free static
+page: hero, the rendered showcase clips, a live "generate your own" box, specs.
+`vercel.json` sets `outputDirectory: apps/web` with no build step, and
+`.vercelignore` keeps the Python tree, `storage/` and the 100 MB+ of media out of
+the upload.
+
+```bash
+npx vercel --prod          # first time
+npx vercel --prod          # subsequent deploys
+```
+
+**Renderer API → any container host.** The pipeline needs ffmpeg, a writable
+volume and ~70 s per render, so it cannot run as a serverless function. It ships
+as a container and runs on Render / Railway / Fly:
+
+```bash
+docker build -t qf-pipeline .
+docker run -p 8000:8000 -v qf-storage:/app/storage qf-pipeline
+```
+
+The static site points at a deployed API with `?api=https://your-api.example.com`.
+With no `api` param it calls its own origin, which is how it behaves when served
+by the FastAPI service itself (`make run-api`).
 
 ## Publish to Qoneqt (manual step judges require)
 

@@ -1,0 +1,31 @@
+# Vercel uploads only the static showcase (apps/web). Everything else in this
+# repo is source for the container-hosted API, which is far too large and does
+# far too much work for a static build.
+storage/
+packages/
+apps/api/
+apps/web/media/*.raw.mp4
+workers/
+brag-output/
+tests/
+docs/
+scripts/
+.github/
+.agents/
+.opencode/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.ruff_cache/
+**/*.egg-info/
+.git/
+.gitignore
+.gitattributes
+Dockerfile
+docker-compose.yml
+Makefile
+pyproject.toml
+challenge.pdf
+.env
+.env.*
+test_styles.py
