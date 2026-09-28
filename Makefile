@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: help install dev test lint format typecheck run-api render-sample docker-build docker-up docker-down clean check
+.PHONY: help install dev test lint format typecheck run-api render-sample render-showcase showcase docker-build docker-up docker-down deploy clean check
 
 help:
 	@echo "QF pipeline commands:"
@@ -10,6 +10,9 @@ help:
 	@echo "  make lint          - ruff check ."
 	@echo "  make format        - ruff format ."
 	@echo "  make render-sample - sample MP4 (TOPIC=...)"
+	@echo "  make render-showcase - re-render the 4 showcase clips"
+	@echo "  make showcase      - compress showcase clips + posters for web"
+	@echo "  make deploy        - vercel --prod (static site, needs vercel login)"
 	@echo "  make docker-build  - build single-service image"
 	@echo "  make docker-up     - compose up -d"
 	@echo "  make check         - lint + test"
@@ -35,6 +38,17 @@ format:
 
 render-sample:
 	$(PYTHON) scripts/render_sample.py --topic "$(TOPIC)"
+
+# Showcase set: full-quality renders -> web-compressed clips + posters.
+showcase: render-showcase
+	$(PYTHON) scripts/make_showcase.py
+
+render-showcase:
+	$(PYTHON) scripts/render_showcase.py
+
+# Static showcase site (apps/web). The renderer API is NOT deployed here.
+deploy:
+	vercel --prod
 
 build-java:
 	workers/java-renderer/build.bat

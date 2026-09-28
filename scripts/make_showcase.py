@@ -14,11 +14,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "storage" / "videos"
 OUT = ROOT / "apps" / "web" / "media"
 
-# (source file, slug, label) - the four distinct 22s copy-mode renders
+# (source file, slug, label) - the four distinct 22s copy-mode renders,
+# written by scripts/render_showcase.py (cinema is the earlier hand-tuned pass).
 SHOWCASE = [
-    ("agent1-chai.mp4", "chai", "Chai tapri sunrise regulars"),
-    ("agent2-mech.mp4", "keyboard", "Mechanical keyboard custom build"),
-    ("agent3-maggi.mp4", "maggi", "Maggi instant noodles review"),
+    ("show-chai.mp4", "chai", "Chai tapri sunrise regulars"),
+    ("show-keyboard.mp4", "keyboard", "Mechanical keyboard custom build"),
+    ("show-maggi.mp4", "maggi", "Maggi instant noodles review"),
     ("copy5-final.mp4", "cinema", "Chai tapri - cinema grade"),
 ]
 

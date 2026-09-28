@@ -73,9 +73,27 @@ def _esc(s: object) -> str:
     return _html.escape(str(s), quote=False)
 
 
+# Max rendered characters per caption line at 64px in a 1080-wide frame.
+_CAP_CHARS = 22
+
+
 def _frag(text: str, n: int = 5) -> str:
+    """Uppercase fragment of at most n words, trimmed to fit one caption line.
+
+    Budget is on rendered width, not word count: the caption is 64px/800 in a
+    1080 frame, so ~22 chars per line. Long topics otherwise wrap to two lines
+    and collide with the window above.
+    """
     words = str(text).split()
-    return " ".join(words[:n]).upper() or "QONEQT"
+    out: list[str] = []
+    width = 0
+    for w in words[:n]:
+        add = len(w) + (1 if out else 0)
+        if out and width + add > _CAP_CHARS:
+            break
+        out.append(w)
+        width += add
+    return " ".join(out).upper() or "QONEQT"
 
 
 def build_copy(script, out_dir: str | Path, style: str = "auto") -> str:
