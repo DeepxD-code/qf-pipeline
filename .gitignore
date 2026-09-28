@@ -1,0 +1,36 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.venv/
+venv/
+.env
+storage/jobs/*.json
+storage/videos/*.mp4
+storage/videos/*.txt
+storage/cards/
+storage/comps/
+brag-output/composition/.hyperframes/
+brag-output/composition/.thumbnails/
+brag-output/composition/.waveform-cache/
+!storage/.gitkeep
+!storage/jobs/.gitkeep
+!storage/videos/.gitkeep
+node_modules/
+.next/
+# Rendered deliverables (reproducible via make targets)
+brag-output/*.mp4
+brag-output/*.jpg
+brag-output/composition/snapshots/
+brag-output/composition/assets/
+# Tool-managed skill installs (reinstall: npx skills add https://github.com/latent-spaces/brag --skill brag)
+.agents/
+.opencode/
+workers/*/classes/

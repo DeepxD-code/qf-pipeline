@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.git
+storage/videos/*.mp4
+storage/jobs/*.json

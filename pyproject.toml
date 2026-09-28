@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qf-pipeline"
+version = "0.1.0"
+description = "Qoneqt x CTRL FREAK - LLM content pipeline to Global Feed video"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+  "fastapi>=0.109",
+  "uvicorn[standard]>=0.27",
+  "pydantic>=2.6",
+  "pydantic-settings>=2.2",
+  "httpx>=0.26",
+  "pillow>=10.0",
+  "python-dotenv>=1.0",
+  "edge-tts>=7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "pytest-asyncio>=0.23", "httpx>=0.26", "ruff>=0.3"]
+test = ["pytest>=7.4", "pytest-asyncio>=0.23", "httpx>=0.26"]
+
+[tool.setuptools.packages.find]
+where = ["apps/api/src", "packages/qf_script/src", "packages/qf_visuals/src", "packages/qf_compose/src", "packages/qf_voice/src", "packages/qf_audio/src"]
+include = ["qf_*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["apps", "packages", "tests", "scripts"]
+exclude = [".git", ".agents", ".opencode", ".pytest_cache", ".ruff_cache", "node_modules", "storage", "brag-output*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "TRY", "RET", "ASYNC"]
+ignore = ["S101", "TRY003"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"

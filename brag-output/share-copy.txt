@@ -1,0 +1,2 @@
+Made QF Pipeline. It's TOPIC IN. MP4 OUT. — an LLM video pipeline for the Qoneqt Global Feed with Python + Java backends and zero keys required.
+Ship it. Publish it on Qoneqt.

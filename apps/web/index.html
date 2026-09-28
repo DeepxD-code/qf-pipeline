@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Qoneqt x CTRL FREAK — AI Video Pipeline</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0b0b12; color:#f2f2f5; margin:0; padding:32px; }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .card { background:#15151f; border:1px solid #2a2a3a; border-radius:16px; padding:24px; margin:16px 0; }
+  input, button { font-size:16px; padding:12px; border-radius:10px; border:1px solid #333; }
+  input { width:70%; background:#0f0f17; color:#fff; }
+  button { background:#fff; color:#000; cursor:pointer; font-weight:700; }
+  video { width:280px; border-radius:12px; border:1px solid #333; }
+  .mono { font-family: monospace; font-size:13px; color:#b9b9c7; white-space:pre-wrap; }
+  a { color:#ffe878; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Qoneqt × CTRL FREAK — Content Pipeline</h1>
+  <p>Topic → LLM script → 1080×1920 cards → ffmpeg MP4 → publish on Qoneqt Global Feed.</p>
+  <div class="card">
+    <input id="topic" placeholder="e.g. AI study communities in Kochi" value="AI communities in Kochi" />
+    <button onclick="generate()">Generate video</button>
+    <div id="status" class="mono">idle</div>
+  </div>
+  <div class="card" id="out" style="display:none">
+    <h3>Output</h3>
+    <video id="vid" controls playsinline></video>
+    <div><a id="dl" href="#">Download MP4</a></div>
+    <div id="script" class="mono"></div>
+  </div>
+</div>
+<script>
+async function generate() {
+  const topic = document.getElementById('topic').value;
+  const st = document.getElementById('status');
+  st.textContent = 'queued...';
+  const r = await fetch('/api/v1/jobs', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({topic})});
+  const {job_id} = await r.json();
+  st.textContent = 'job ' + job_id + ' running...';
+  for (let i=0;i<60;i++) {
+    await new Promise(r=>setTimeout(r,1500));
+    const j = await (await fetch('/api/v1/jobs/'+job_id)).json();
+    st.textContent = j.status + ' / ' + j.stage;
+    if (j.status==='ready') {
+      document.getElementById('out').style.display='block';
+      document.getElementById('vid').src = j.video_url;
+      document.getElementById('dl').href = j.video_url;
+      document.getElementById('script').textContent = JSON.stringify(j.script, null, 2);
+      st.textContent = 'ready — upload the MP4 to Qoneqt Global Feed';
+      return;
+    }
+    if (j.status==='failed') { st.textContent = 'failed: ' + j.error; return; }
+  }
+  st.textContent = 'timeout polling — check /api/v1/jobs/'+job_id;
+}
+</script>
+</body>
+</html>

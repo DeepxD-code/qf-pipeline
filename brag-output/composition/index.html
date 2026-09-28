@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>QF Pipeline — brag</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      body { margin: 0; background: #0b0b12; color: #f2f2f5; font-family: Arial, Helvetica, sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0b0b12; }
+      .clip { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+      .hook-title { font-size: 150px; font-weight: 800; margin: 0; letter-spacing: -2px; }
+      .hook-title .accent { color: #ffe878; }
+      .hook-sub { font-size: 54px; color: #b9b9c7; margin: 30px 0 0 0; text-align: center; }
+      .badge-row { display: flex; gap: 18px; justify-content: center; margin-bottom: 40px; }
+      .badge { background: #fff; color: #14141c; font-weight: 700; font-size: 34px; padding: 12px 26px; border-radius: 20px; }
+      .demo-card { width: 1120px; background: #15151f; border: 1px solid #2a2a3a; border-radius: 16px; padding: 44px 52px; }
+      .demo-title { font-size: 40px; font-weight: 700; margin: 0 0 26px 0; }
+      .demo-row { display: flex; gap: 16px; align-items: center; }
+      .demo-input { flex: 1; background: #0f0f17; border: 1px solid #333; border-radius: 10px; padding: 20px 24px; font-size: 34px; min-height: 44px; }
+      .demo-btn { background: #fff; color: #000; font-weight: 700; font-size: 30px; border-radius: 10px; padding: 20px 34px; }
+      .demo-status { position: relative; font-size: 28px; color: #b9b9c7; margin: 22px 0 0 0; min-height: 40px; }
+      .demo-status .swap { position: absolute; left: 0; top: 0; }
+      .cursor { position: absolute; left: 420px; top: 720px; width: 34px; height: 34px; border-radius: 50%; background: #ffe878; }
+      .click-ring { position: absolute; left: 1005px; top: 540px; width: 70px; height: 70px; border-radius: 50%; border: 5px solid #ffe878; opacity: 0; }
+      .pipe-card { width: 380px; background: #15151f; border: 1px solid #2a2a3a; border-radius: 16px; padding: 36px 30px; text-align: center; }
+      .pipe-card .k { font-size: 44px; font-weight: 800; margin: 0; }
+      .pipe-card .d { font-size: 28px; color: #b9b9c7; margin: 14px 0 0 0; }
+      .pipe-row { display: flex; gap: 28px; }
+      .rt-badge { font-size: 64px; font-weight: 800; background: #fff; color: #14141c; border-radius: 22px; padding: 26px 54px; }
+      .rt-line { font-size: 46px; margin: 36px 0 0 0; text-align: center; }
+      .chip { display: inline-block; font-size: 30px; color: #0b0b12; background: #ffe878; border-radius: 999px; padding: 10px 28px; margin-top: 28px; font-weight: 700; }
+      .phone { width: 330px; height: 640px; border-radius: 36px; background: linear-gradient(180deg, #2b1a5e 0%, #0e2a5e 100%); border: 3px solid #2a2a3a; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px; }
+      .phone .q { background: #fff; color: #14141c; font-weight: 700; font-size: 26px; border-radius: 14px; padding: 8px 18px; }
+      .phone .c { color: #ffe878; font-size: 30px; font-weight: 700; }
+      .outro-line { font-size: 64px; font-weight: 800; margin: 0 0 18px 0; }
+      .outro-sub { font-size: 40px; color: #b9b9c7; margin: 0; }
+      .outro-wrap { display: flex; gap: 90px; align-items: center; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-3igh" id="root" data-composition-id="qf-brag" data-start="0" data-width="1920" data-height="1080" data-duration="20">
+      <section data-hf-id="hf-e8hj" id="qf-s1" class="clip" data-start="0" data-duration="3" data-track-index="0">
+        <div data-hf-id="hf-yeow">
+          <div data-hf-id="hf-yc7e" class="badge-row"><div data-hf-id="hf-eymq" class="badge" id="qf-s1-badge">QONEQT × CTRL FREAK</div></div>
+          <h1 data-hf-id="hf-b9p5" class="hook-title" id="qf-s1-title">TOPIC IN. <span data-hf-id="hf-mpr8" class="accent">MP4 OUT.</span></h1>
+          <p data-hf-id="hf-mnyv" class="hook-sub" id="qf-s1-sub">Zero keys required.</p>
+        </div>
+      </section>
+      <section data-hf-id="hf-ap05" id="qf-s2" class="clip" data-start="3" data-duration="4" data-track-index="1">
+        <div data-hf-id="hf-7tfe" class="demo-card" id="qf-s2-card">
+          <p data-hf-id="hf-cdhz" class="demo-title">QF Pipeline — live demo</p>
+          <div data-hf-id="hf-jlge" class="demo-row">
+            <div data-hf-id="hf-pxs6" class="demo-input"><span data-hf-id="hf-76oq" id="qf-s2-t1">AI communities</span> <span data-hf-id="hf-fzqp" id="qf-s2-t2">in Kochi</span></div>
+            <div data-hf-id="hf-jpm5" class="demo-btn" id="qf-s2-btn">Generate</div>
+          </div>
+          <p data-hf-id="hf-iwdd" class="demo-status" data-layout-allow-overlap=""><span data-hf-id="hf-tq27" id="qf-s2-st1">queued…</span><span data-hf-id="hf-akk1" class="swap" id="qf-s2-st2">running → ready</span></p>
+        </div>
+        <div data-hf-id="hf-r15k" class="cursor" id="qf-s2-cursor"></div>
+        <div data-hf-id="hf-v031" class="click-ring" id="qf-s2-ring"></div>
+      </section>
+      <section data-hf-id="hf-9gh6" id="qf-s3" class="clip" data-start="7" data-duration="5" data-track-index="2">
+        <div data-hf-id="hf-2bfv" class="pipe-row">
+          <div data-hf-id="hf-wnt4" class="pipe-card" id="qf-s3-c1"><p data-hf-id="hf-fda5" class="k">SCRIPT</p><p data-hf-id="hf-fsmz" class="d">LLM hook + scenes</p></div>
+          <div data-hf-id="hf-5boz" class="pipe-card" id="qf-s3-c2"><p data-hf-id="hf-20bh" class="k">CARDS</p><p data-hf-id="hf-7ja0" class="d">1080×1920 visuals</p></div>
+          <div data-hf-id="hf-1dky" class="pipe-card" id="qf-s3-c3"><p data-hf-id="hf-53kb" class="k">FFMPEG</p><p data-hf-id="hf-m0q2" class="d">H.264 MP4 out</p></div>
+        </div>
+      </section>
+      <section data-hf-id="hf-edir" id="qf-s4" class="clip" data-start="12" data-duration="4" data-track-index="3">
+        <div data-hf-id="hf-y7yw">
+          <div data-hf-id="hf-l557" class="pipe-row">
+            <div data-hf-id="hf-mpgp" class="rt-badge" id="qf-s4-py">PYTHON</div>
+            <div data-hf-id="hf-nbim" class="rt-badge" id="qf-s4-jv">JAVA</div>
+          </div>
+          <p data-hf-id="hf-2g2r" class="rt-line" id="qf-s4-line">Same API. Same storage. Pick your runtime.</p>
+          <div data-hf-id="hf-81i5" style="text-align:center"><span data-hf-id="hf-1ya0" class="chip" id="qf-s4-chip">7/7 tests green</span></div>
+        </div>
+      </section>
+      <section data-hf-id="hf-fpin" id="qf-s5" class="clip" data-start="16" data-duration="4" data-track-index="4">
+        <div data-hf-id="hf-qq1q" class="outro-wrap">
+          <div data-hf-id="hf-1cj3" class="phone" id="qf-s5-phone"><div data-hf-id="hf-kc35" class="q">QONEQT</div><div data-hf-id="hf-s702" class="c">Your video is ready</div></div>
+          <div data-hf-id="hf-x11t">
+            <p data-hf-id="hf-istw" class="outro-line" id="qf-s5-line">Ship it. Publish it on Qoneqt.</p>
+            <p data-hf-id="hf-2ozy" class="outro-sub" id="qf-s5-sub">QF Pipeline — topic in, MP4 out.</p>
+          </div>
+        </div>
+      </section>
+      <audio data-hf-id="hf-ki7q" id="bg-music" data-start="0" data-duration="20" data-track-index="10" data-volume="0.35" src="assets/music/happy-beats-business-moves-vol-1-by-ende-dot-app.mp3"></audio>
+    </div>
+    <script>
+      var tl = gsap.timeline({ paused: true });
+      // S1 hook: slam then settle
+      tl.fromTo("#qf-s1-title", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power4.out" }, 0.2);
+      tl.fromTo("#qf-s1-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.9);
+      // S2 demo: staged typing chunks, cursor move, click, status swap
+      tl.fromTo("#qf-s2-t1", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 3.6);
+      tl.fromTo("#qf-s2-t2", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 4.4);
+      tl.fromTo("#qf-s2-cursor", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 620, y: -140, duration: 0.8, ease: "power2.inOut" }, 5.4);
+      tl.fromTo("#qf-s2-ring", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1.4, duration: 0.4, ease: "power2.out" }, 6.2);
+      tl.fromTo("#qf-s2-st1", { opacity: 1 }, { opacity: 0, duration: 0.3 }, 6.4);
+      tl.fromTo("#qf-s2-st2", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 6.4);
+      // S3 pipeline cards arrive one by one, hold full set
+      tl.fromTo("#qf-s3-c1", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 7.4);
+      tl.fromTo("#qf-s3-c2", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 8.4);
+      tl.fromTo("#qf-s3-c3", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 9.4);
+      // S4 badges from opposite sides
+      tl.fromTo("#qf-s4-py", { opacity: 0, x: -500 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 12.3);
+      tl.fromTo("#qf-s4-jv", { opacity: 0, x: 500 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 12.7);
+      tl.fromTo("#qf-s4-line", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5 }, 13.2);
+      tl.fromTo("#qf-s4-chip", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.4 }, 13.8);
+      // S5 outro
+      tl.fromTo("#qf-s5-phone", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 16.2);
+      tl.fromTo("#qf-s5-line", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 }, 16.5);
+      tl.fromTo("#qf-s5-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 17.4);
+      window.__timelines["qf-brag"] = tl;
+    </script>
+  </body>
+</html>

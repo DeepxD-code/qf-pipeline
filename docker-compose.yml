@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    container_name: qf-pipeline-api
+    env_file: [.env]
+    environment:
+      - STORAGE_DIR=/app/storage
+      - API_PORT=8000
+    volumes:
+      - ./storage:/app/storage
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/live')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
