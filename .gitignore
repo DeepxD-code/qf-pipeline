@@ -34,3 +34,5 @@ brag-output/composition/assets/
 .agents/
 .opencode/
 workers/*/classes/
+
+.vercel

@@ -70,6 +70,8 @@ make render-sample TOPIC="AI communities in Kochi"
 
 ## Deployment
 
+Full instructions in [`docs/DEPLOY.md`](docs/DEPLOY.md). Summary:
+
 The two halves deploy to different places, on purpose.
 
 **Showcase site → Vercel (static).** `apps/web/` is a dependency-free static
