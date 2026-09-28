@@ -78,14 +78,15 @@
 <section id="generate">
   <h2>Generate your own</h2>
   <p class="sub">
-    Type a topic and the pipeline does the rest. If the live API is reachable you
-    get a fresh render in about 70 seconds; otherwise this falls back to the
-    showcase clip above.
+    Type a topic and the pipeline does the rest — a fresh render takes about
+    70 seconds. This page checks on load whether a renderer API is reachable and
+    switches the button accordingly, so it never leaves you waiting on a request
+    that cannot succeed.
   </p>
   <div class="gen">
     <div class="row">
       <input type="text" id="topic" placeholder="e.g. Monsoon tea stalls in Fort Kochi" value="Monsoon tea stalls in Fort Kochi" />
-      <button class="btn btn-primary" id="go">Generate video</button>
+      <button class="btn btn-primary" id="go" disabled>Checking renderer…</button>
     </div>
     <div class="status" id="status">idle</div>
   </div>
@@ -97,10 +98,11 @@
     </div>
   </div>
   <p class="note" id="note" hidden>
-    The live renderer runs on a container host (Docker, ~1 GB image, needs ffmpeg
-    and a writable volume) — it can't run on a static CDN. This page is the
-    front end; point it at a deployed API with
-    <code>?api=https://your-api.example.com</code>.
+    <strong>No renderer API reachable.</strong> The live renderer needs ffmpeg and a
+    writable volume, so it runs on a container host (Render / Railway / Fly) — not
+    on a static CDN. Deploy it with <code>docker build -t qf-pipeline .</code>, then
+    load this page as <code>?api=https://your-api.example.com</code> to render live.
+    The showcase clips above came from that same API.
   </p>
 </section>
 
@@ -131,6 +133,7 @@ const $ = (id) => document.getElementById(id);
 const statusEl = $('status');
 const outEl = $('out');
 const noteEl = $('note');
+const goBtn = $('go');
 
 function setStatus(msg, kind) {
   statusEl.textContent = msg;
@@ -143,10 +146,38 @@ async function api(path, opts) {
   return res.json();
 }
 
+// Probe the renderer before enabling the button. A static host answers 404 for
+// /health, so this distinguishes "no API here" from "API is down".
+async function probe() {
+  if (API) {
+    setStatus('API: ' + API + ' — checking…');
+  } else {
+    setStatus('no ?api= parameter set, checking this origin…');
+  }
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(API + '/health', { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    await res.json();
+    goBtn.disabled = false;
+    goBtn.textContent = 'Generate video';
+    setStatus('live renderer connected — enter a topic and generate', 'ok');
+    return true;
+  } catch (err) {
+    goBtn.disabled = true;
+    goBtn.textContent = 'Renderer offline';
+    noteEl.hidden = false;
+    setStatus('renderer API not reachable (' + err.message + ')');
+    return false;
+  }
+}
+
 async function generate() {
   const topic = $('topic').value.trim();
   if (!topic) return;
-  const btn = $('go');
+  const btn = goBtn;
   btn.disabled = true;
   outEl.classList.remove('on');
   noteEl.hidden = true;
@@ -181,14 +212,16 @@ async function generate() {
   } catch (err) {
     setStatus('API not reachable (' + err.message + ')', 'err');
     noteEl.hidden = false;
+    goBtn.disabled = true;
+    goBtn.textContent = 'Renderer offline';
   } finally {
-    btn.disabled = false;
+    if (!goBtn.textContent.includes('offline')) btn.disabled = false;
   }
 }
 
-$('go').addEventListener('click', generate);
-$('topic').addEventListener('keydown', (e) => { if (e.key === 'Enter') generate(); });
-if (API) setStatus('API: ' + API);
+goBtn.addEventListener('click', generate);
+$('topic').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !goBtn.disabled) generate(); });
+probe();
 </script>
 </body>
 </html>

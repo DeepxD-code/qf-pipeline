@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -12,6 +13,19 @@ from qf_api.pipeline import ffmpeg_available
 from qf_api.routes import router
 
 app = FastAPI(title="Qoneqt x CTRL FREAK — AI Content Pipeline", version="0.1.0")
+
+# The showcase site is served from a different origin than this API (Vercel CDN
+# vs container host), so the browser needs explicit CORS to call it at all.
+# Credentials are not used: the API is unauthenticated, so a wildcard origin is
+# safe here and avoids a deploy-time env var that is easy to forget.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 app.include_router(router, prefix="/api/v1")
 
 WEB_DIR = Path(__file__).resolve().parents[3] / "web"  # apps/api/src/qf_api -> apps/web
