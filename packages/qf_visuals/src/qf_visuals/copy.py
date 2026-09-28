@@ -78,7 +78,8 @@ def _frag(text: str, n: int = 5) -> str:
     return " ".join(words[:n]).upper() or "QONEQT"
 
 
-def build_copy(script, out_dir: str | Path) -> str:
+def build_copy(script, out_dir: str | Path, style: str = "auto") -> str:
+    """Topic-drawn beats in a resolved art style (same fluidity, different look)."""
     """6 beats from a 3-scene script: every caption, window and backdrop is topic-drawn.
 
     Backdrops pair up (beats 1-2, 3-4, 5-6 share) for continuity with variety.
@@ -90,6 +91,11 @@ def build_copy(script, out_dir: str | Path) -> str:
     assets = out / "assets"
     assets.mkdir(exist_ok=True)
     topic = script.topic
+    st = STYLES[choose_style(topic, style)]
+    accent = st["accent"]
+    shade = st["shade"]
+    cap_css = st["cap_css"]
+    vig_tag = '<div class="vig"></div>' if st["vignette"] else ""
     scenes = list(script.scenes)
     bg_files: list[str] = []
     roles = [
@@ -99,7 +105,7 @@ def build_copy(script, out_dir: str | Path) -> str:
     ]
     for i, _s in enumerate(scenes):
         try:
-            prompt = f"{topic.strip()}, {roles[i % len(roles)]}, vertical photo, no text"
+            prompt = f"{topic.strip()}, {roles[i % len(roles)]}, {st['bg']}, vertical photo, no text"
             bg = fetch_photo(prompt, assets / f"bg_{i + 1:02d}.jpg")
             bg_files.append(f"assets/{Path(bg).name}")
         except Exception as exc:
@@ -268,7 +274,9 @@ def build_copy(script, out_dir: str | Path) -> str:
   html,body {{ margin:0; padding:0; background:#000; }}
   #root {{ width:100%; height:100%; position:relative; overflow:hidden; background:#000; }}
   .world {{ position:absolute; inset:0; }}
-  .shade {{ position:absolute; inset:0; background:rgba(4,4,10,0.28); }}
+  .shade {{ position:absolute; inset:0; background:rgba(4,4,10,{shade}); }}
+  .vig {{ position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }}
   .world img {{ position:absolute; left:0; top:-46px; width:100%; height:calc(100% + 92px); object-fit:cover; }}
   .clip .bg {{ position:absolute; left:0; top:-46px; width:100%; height:calc(100% + 92px); object-fit:cover; }}
   .clip {{ position:absolute; inset:0; overflow:hidden; }}
@@ -291,9 +299,9 @@ def build_copy(script, out_dir: str | Path) -> str:
   .code {{ font-size:34px; color:#c8c8d6; margin-top:16px; }}
   .song {{ font-size:44px; font-weight:800; color:#fff; }}
   .lyr {{ font-size:36px; color:#c8c8d6; margin-top:14px; }}
-  .lyr.hl2 {{ color:#8ab8ff; }}
+  .lyr.hl2 {{ color:{accent}; }}
   .track {{ height:20px; background:#2a2a3a; border-radius:10px; margin-top:28px; overflow:hidden; }}
-  .fill {{ height:100%; width:4%; background:#8ab8ff; border-radius:10px; }}
+  .fill {{ height:100%; width:4%; background:{accent}; border-radius:10px; }}
   .fill.green {{ background:#4ae08a; }}
   .bar-label {{ font-size:30px; color:#c8c8d6; margin-top:26px; }}
   .ready {{ display:inline-block; margin-top:28px; background:#4ae08a; color:#06130b; font-weight:800;
@@ -306,7 +314,7 @@ def build_copy(script, out_dir: str | Path) -> str:
   .titlecard .tt {{ font-size:110px; font-weight:800; color:#fff; font-family:Arial,Helvetica,sans-serif; }}
   .titlecard .ts {{ font-size:40px; color:#e8e8f0; margin-top:18px; font-family:Arial,Helvetica,sans-serif;
     text-shadow:0 4px 30px rgba(0,0,0,0.95); }}
-  .cap {{ position:absolute; left:0; right:0; bottom:330px; text-align:center; font-size:64px; font-weight:800;
+  .cap {{ position:absolute; left:0; right:0; {cap_css}; text-align:center; font-size:64px; font-weight:800;
     color:#fff; font-family:Arial,Helvetica,sans-serif; text-shadow:0 4px 34px rgba(0,0,0,0.95); }}
   .cap .bld {{ color:#8ab8ff; }}
   .cap .dim {{ color:#8a8a95; }}
@@ -314,7 +322,7 @@ def build_copy(script, out_dir: str | Path) -> str:
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
 </head><body>
 <div data-composition-id="qf" data-width="1080" data-height="1920" data-duration="{total}" id="root">
-  <div class="world"><div class="shade"></div></div>
+  <div class="world"><div class="shade"></div>{vig_tag}</div>
 {''.join(clips)}
 </div>
 <script>
