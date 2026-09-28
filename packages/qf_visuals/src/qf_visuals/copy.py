@@ -61,11 +61,12 @@ def choose_style(topic: str, explicit: str = "auto") -> str:
 
 
 def style_music(style: str) -> Path:
-    from qf_audio.mix import MUSIC as _default
+    from qf_audio import mix as _mix
 
+    default = _mix.MUSIC
     name = STYLES.get(style, STYLES["noir"])["music"]
-    p = _default.parent / name
-    return p if p.exists() else _default
+    p = default.parent / name
+    return p if p.exists() else default
 
 
 def _esc(s: object) -> str:
@@ -91,9 +92,15 @@ def build_copy(script, out_dir: str | Path) -> str:
     topic = script.topic
     scenes = list(script.scenes)
     bg_files: list[str] = []
-    for i, s in enumerate(scenes):
+    roles = [
+        "dramatic hero shot, cinematic still",
+        "real life scene with people, photorealistic",
+        "climax moment, golden hour energy",
+    ]
+    for i, _s in enumerate(scenes):
         try:
-            bg = fetch_photo(f"{s.visual_prompt}, dark cinematic, no text", assets / f"bg_{i + 1:02d}.jpg")
+            prompt = f"{topic.strip()}, {roles[i % len(roles)]}, vertical photo, no text"
+            bg = fetch_photo(prompt, assets / f"bg_{i + 1:02d}.jpg")
             bg_files.append(f"assets/{Path(bg).name}")
         except Exception as exc:
             print(f"photo bg failed for scene {i + 1}, black fallback: {exc}")
