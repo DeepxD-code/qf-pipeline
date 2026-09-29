@@ -28,6 +28,26 @@ Copy these folders to the 3090 PC (USB/robocopy — both downloads are resumable
 - When set, the pipeline POSTs scene prompts to the local ComfyUI API (`--listen 127.0.0.1 --port 8188`) and uses returned clips as scene backgrounds instead of Pollinations stills.
 - Same job schema, same `/v/{id}.mp4` serving — the engine is a background swap, not a rewrite.
 
+## Verify before and after transfer
+
+Downloads get interrupted, and a short-truncated safetensors shard still has a
+valid JSON header — so `ls` alone will not tell you the copy is intact. This
+reads each shard's header and checks the declared tensor byte ranges actually
+fit inside the file:
+
+```bash
+python scripts/check_wan.py                      # default local path
+WAN_DIR=/mnt/models/Wan2.1-T2V-14B python scripts/check_wan.py   # on the 3090
+```
+
+Run it before moving to USB and again on the 3090. A truncated shard reports
+`truncated: needs 9.89GB, has 6.20GB`; a good one reports `ok 189 tensors`.
+Any shard that fails, re-download just that file:
+
+```bash
+huggingface-cli download Wan-AI/Wan2.1-T2V-14B diffusion_pytorch_model-00004-of-00006.safetensors
+```
+
 ## Transfer command (run on this machine)
 
 ```bat
